@@ -46,7 +46,7 @@
 #' }
 
 cfa_fit_plot <- function(
-    model, data, covs = FALSE, estimator = "MLR", remove.items = "",
+    model, data = NULL, covs = FALSE, estimator = "MLR", remove.items = "",
     print = TRUE, save.as.pdf = FALSE, file.name, ...) {
   insight::check_if_installed("lavaanPlot")
 
@@ -68,7 +68,12 @@ cfa_fit_plot <- function(
     model <- gsub(remove.items3, "", model)
   }
   # Fit model
-  fit <- lavaan::cfa(model, data = data, estimator = estimator, ...)
+  if(is.null(data)){
+    fit <- model
+  } else {
+    fit <- lavaan::cfa(model, data = data, estimator = estimator, ...)
+  }
+
   if (isTRUE(print)) {
     print(summary(fit,
       standardized = TRUE,
